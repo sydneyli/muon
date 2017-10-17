@@ -375,7 +375,7 @@ source_set("native_mate") {
   deps = [
     "build/node",
     "build/ad_block",
-    "build/tracking_protection",
+    "build/tp_node_addon",
     "//third_party/WebKit/public:blink_headers",
   ]
 }

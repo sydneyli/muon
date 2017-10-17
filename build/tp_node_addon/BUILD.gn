@@ -1,4 +1,4 @@
-source_set("tracking_protection") {
+source_set("tp_node_addon") {
   configs += [
     "//electron/build:electron_config",
   ]
