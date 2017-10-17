@@ -17,9 +17,9 @@
 #include "chrome/common/chrome_switches.h"
 #include "common/switches.h"
 #include "components/cookie_config/cookie_store_util.h"
-#include "content/common/devtools/devtools_network_transaction_factory.h"
 #include "content/public/browser/browser_thread.h"
 #include "content/public/browser/cookie_store_factory.h"
+#include "content/public/browser/devtools_network_transaction_factory.h"
 #include "content/public/common/content_switches.h"
 #include "net/base/host_mapping_rules.h"
 #include "net/cert/cert_verifier.h"
@@ -356,14 +356,10 @@ net::URLRequestContext* URLRequestContextGetter::GetURLRequestContext() {
       backend.reset(delegate_->CreateHttpCacheBackendFactory(base_path_));
     }
 
-    //storage_->set_http_transaction_factory(base::WrapUnique(
-    //    new net::HttpCache(content::DevToolsNetworkTransactionFactory(
-    //                           http_network_session_.get()),
-    //                       std::move(backend), false)));
-    //storage_->set_http_transaction_factory(base::WrapUnique(
-    //    new net::HttpCache(http_network_session_.get(),
-    //                       std::move(backend),
-    //                       false)));
+    storage_->set_http_transaction_factory(base::WrapUnique(
+       new net::HttpCache(content::CreateDevToolsNetworkTransactionFactory(
+                              http_network_session_.get()),
+                          std::move(backend), false)));
 
     std::unique_ptr<net::URLRequestJobFactory> job_factory =
         delegate_->CreateURLRequestJobFactory(&protocol_handlers_);

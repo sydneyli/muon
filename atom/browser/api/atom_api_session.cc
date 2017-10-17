@@ -469,20 +469,22 @@ void Session::EnableNetworkEmulation(const mate::Dictionary& options) {
                                                  upload_throughput));
   }
 
-  DevToolsNetworkController::SetNetworkState(
-      devtools_network_emulation_client_id_, std::move(conditions));
-  // TODO(hferreiro)
-  // profile_->network_delegate()->setdevtoolsnetworkemulationclientid(
-      // devtools_network_emulation_client_id_);
+  BrowserThread::PostTask(BrowserThread::IO, FROM_HERE,
+      base::BindOnce(&DevToolsNetworkController::SetNetworkState,
+                     devtools_network_emulation_client_id_,
+                     std::move(conditions)));
+  profile_->network_delegate()->SetDevToolsNetworkEmulationClientId(
+      devtools_network_emulation_client_id_);
 }
 
 void Session::DisableNetworkEmulation() {
   std::unique_ptr<DevToolsNetworkConditions> conditions;
-  DevToolsNetworkController::SetNetworkState(
-      devtools_network_emulation_client_id_, std::move(conditions));
-  // TODO(hferreiro)
-  // profile_->network_delegate()->SetDevToolsNetworkEmulationClientId(
-      // std::string());
+  BrowserThread::PostTask(BrowserThread::IO, FROM_HERE,
+      base::BindOnce(&DevToolsNetworkController::SetNetworkState,
+                     devtools_network_emulation_client_id_,
+                     std::move(conditions)));
+  profile_->network_delegate()->SetDevToolsNetworkEmulationClientId(
+      std::string());
 }
 
 void Session::SetCertVerifyProc(v8::Local<v8::Value> val,
