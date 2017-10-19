@@ -1817,14 +1817,18 @@ void WebContents::EnableDeviceEmulation(
   if (type_ == REMOTE)
     return;
 
-  //Send(new ViewMsg_EnableDeviceEmulation(routing_id(), params));
+  web_contents()->GetRenderViewHost()->Send(
+      new ViewMsg_EnableDeviceEmulation(
+          web_contents()->GetRenderViewHost()->GetRoutingID(), params));
 }
 
 void WebContents::DisableDeviceEmulation() {
   if (type_ == REMOTE)
     return;
 
-  //Send(new ViewMsg_DisableDeviceEmulation(routing_id()));
+  web_contents()->GetRenderViewHost()->Send(
+      new ViewMsg_DisableDeviceEmulation(
+          web_contents()->GetRenderViewHost()->GetRoutingID()));
 }
 
 void WebContents::ToggleDevTools() {
@@ -2154,9 +2158,10 @@ bool WebContents::SendIPCSharedMemory(const base::string16& channel,
   if (!memory_handle.IsValid())
     return false;
 
-  bool success = true;
-  //bool success = Send(
-  //    new AtomViewMsg_Message_Shared(routing_id(), channel, memory_handle));
+  bool success = web_contents()->GetRenderViewHost()->Send(
+      new AtomViewMsg_Message_Shared(
+          web_contents()->GetRenderViewHost()->GetRoutingID(), channel,
+          memory_handle));
 
   if (!success && memory_handle.IsValid()) {
     // cleanup if the send failed
@@ -2172,8 +2177,10 @@ bool WebContents::SendIPCSharedMemory(const base::string16& channel,
 bool WebContents::SendIPCMessage(bool all_frames,
                                  const base::string16& channel,
                                  const base::ListValue& args) {
-  return true;
-  //return Send(new AtomViewMsg_Message(routing_id(), all_frames, channel, args));
+  return web_contents()->GetRenderViewHost()->Send(
+      new AtomViewMsg_Message(
+          web_contents()->GetRenderViewHost()->GetRoutingID(), all_frames,
+          channel, args));
 }
 
 void WebContents::SendInputEvent(v8::Isolate* isolate,
