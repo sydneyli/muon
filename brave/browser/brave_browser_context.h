@@ -56,7 +56,8 @@ class BraveBrowserContext : public Profile {
   std::unique_ptr<net::URLRequestJobFactory> CreateURLRequestJobFactory(
       content::ProtocolHandlerMap* protocol_handlers) override;
 
-  void CreateProfilePrefs(scoped_refptr<base::SequencedTaskRunner> io_task_runner);
+  void CreateProfilePrefs(
+      scoped_refptr<base::SequencedTaskRunner> io_task_runner);
 
   ChromeZoomLevelPrefs* GetZoomLevelPrefs() override;
 

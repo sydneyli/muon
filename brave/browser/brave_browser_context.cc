@@ -163,7 +163,7 @@ BraveBrowserContext::BraveBrowserContext(
         atom::AtomBrowserContext::From(partition, false));
     original_context_->otr_context_ = this;
   }
-  CreateProfilePrefs(GetIOTaskRunner());
+  CreateProfilePrefs(io_task_runner_);
   if (original_context_) {
     TrackZoomLevelsFromParent();
   }
